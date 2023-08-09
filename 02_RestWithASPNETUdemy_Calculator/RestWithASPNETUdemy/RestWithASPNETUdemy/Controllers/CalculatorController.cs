@@ -19,62 +19,75 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         #region Acções Matemáticas
-        [HttpGet("media/{firstNumber}/{secondNumber}")]
-        public IActionResult GetMedial(string firstNumber, string secondNumber)
+        [HttpGet("mean/{firstNumber}/{secondNumber}")]
+        public IActionResult Mean(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
-                var media = 
+                var mean = 
                     (
                         ConvertToDecimal(firstNumber)+
                         ConvertToDecimal(secondNumber)
                     )/2;
 
-                return Ok($"O Resultado da média: {firstNumber} e {secondNumber} = {media.ToString()}");
+                return Ok($"O Resultado da Média: {firstNumber} e {secondNumber} = {mean.ToString()}");
             }
             return BadRequest("Invalid Input");
         }
 
-        [HttpGet("multi/{firstNumber}/{secondNumber}")]
-        public IActionResult GetMulti(string firstNumber, string secondNumber)
+        [HttpGet("multiplication/{firstNumber}/{secondNumber}")]
+        public IActionResult Multiplication(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
-                var multi = ConvertToDecimal(firstNumber) * ConvertToDecimal(secondNumber);
-                return Ok($"O Resultado da multiplicação: {firstNumber} * {secondNumber} = {multi.ToString()}");
+                var multiplication = ConvertToDecimal(firstNumber) * ConvertToDecimal(secondNumber);
+                return Ok($"O Resultado da Multiplicação: {firstNumber} * {secondNumber} = {multiplication.ToString()}");
             }
             return BadRequest("Invalid Input");
         }
 
-        [HttpGet("sub/{firstNumber}/{secondNumber}")]
-        public IActionResult GetSub(string firstNumber, string secondNumber)
+        [HttpGet("subtraction/{firstNumber}/{secondNumber}")]
+        public IActionResult Subtraction(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
-                var sub = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
-                return Ok($"O Resultado da substração: {firstNumber} - {secondNumber} = {sub.ToString()}");
+                var subtraction = ConvertToDecimal(firstNumber) - ConvertToDecimal(secondNumber);
+                return Ok($"O Resultado da Substração: {firstNumber} - {secondNumber} = {subtraction.ToString()}");
             }
             return BadRequest("Invalid Input");
         }
 
-        [HttpGet("div/{firstNumber}/{secondNumber}")]
-        public IActionResult GetDiv(string firstNumber, string secondNumber)
+        //exemplo de que a rota division, não precisa necessáriamente ser o nome do método da ActionResult
+        //justamente é o mapeamento da controller
+        [HttpGet("division/{firstNumber}/{secondNumber}")]
+        public IActionResult DivisionXlv(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber)) 
             {
-                var div = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
-                return Ok($"O Resultado da divisão: {firstNumber} / {secondNumber} = {div.ToString()}");
+                var division = ConvertToDecimal(firstNumber) / ConvertToDecimal(secondNumber);
+                return Ok($"O Resultado da Divisão: {firstNumber} / {secondNumber} = {division.ToString()}");
             }
             return BadRequest("Invalid Input");
         }
 
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult GetSum(string firstNumber, string secondNumber)
+        public IActionResult Sum(string firstNumber, string secondNumber)
         {
             if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
             {
                 var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
-                return Ok($"O Resultado da soma: {firstNumber} + {secondNumber} = {sum.ToString()}");
+                return Ok($"O Resultado da Soma: {firstNumber} + {secondNumber} = {sum.ToString()}");
+            }
+            return BadRequest("Invalid Input");
+        }
+
+        [HttpGet("square-root/{firstNumber}")]
+        public IActionResult SquareRoot(string firstNumber)
+        {
+            if (IsNumeric(firstNumber))
+            {
+                var squareRoot = Math.Sqrt((double)ConvertToDecimal(firstNumber));
+                return Ok($"O Resultado da Raíz Quadrada de {firstNumber} = {squareRoot.ToString()}");
             }
             return BadRequest("Invalid Input");
         }
