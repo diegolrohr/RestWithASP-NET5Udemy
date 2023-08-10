@@ -46,14 +46,14 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(_personService.Create(person));
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult Put([FromBody] Person person)
         {
             if (person == null) return BadRequest();
             return Ok(_personService.Update(person));
         }
 
-        [HttpGet("{id}")]
+        [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
             _personService.Delete(id);
