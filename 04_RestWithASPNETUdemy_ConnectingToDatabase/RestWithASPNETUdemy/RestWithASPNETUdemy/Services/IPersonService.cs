@@ -6,6 +6,7 @@ namespace RestWithASPNETUdemy.Services
     public interface IPersonService
     {
         Person Create(Person person);
+        List<Person> CreateRange(List<Person> persons);
         Person FindById(long id);
         Person Update(Person person);
         List<Person> FindAll();

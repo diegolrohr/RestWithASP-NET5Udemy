@@ -1,4 +1,5 @@
 ﻿using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Model.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,64 +10,108 @@ namespace RestWithASPNETUdemy.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
-        //mockar id como se estivesse indo no banco
-        private volatile int count;
+        private MySQLContext _context;
+
+        public PersonServiceImplementation(MySQLContext context)
+        {
+            _context = context;
+        }
+
+        public List<Person> FindAll()
+        {
+            return _context.Persons.ToList();
+        }
+
+        public Person FindById(long id)
+        {
+            try
+            {
+                return _context.Persons.SingleOrDefault(x => x.Id.Equals(id));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
         public Person Create(Person person)
         {
-            //
+            try
+            {
+                _context.Add(person);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return person;
+        }
+
+        public List<Person> CreateRange(List<Person> persons)
+        {
+            try
+            {
+                _context.AddRange(persons);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return persons;
+        }
+
+
+        public Person Update(Person person)
+        {
+            //verifica se já exiuste com o respectivo id
+            //*Eu voltaria exception se nãol tiver, para não dar a falsa impressão de que salvou 
+            if (!Exists(person.Id)) { return new Person(); }
+
+            //se encontrou, vaki alterar os novos valores das propriedades 
+            var result = _context.Persons.SingleOrDefault(x => x.Id.Equals(person.Id));
+            if (result != null)
+            {
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
             return person;
         }
 
         public void Delete(long id)
         {
-            
-        }
-
-        //mock
-        public List<Person> FindAll()
-        {
-            List<Person> persons = new List<Person>();
-            for (int i = 0; i < 8; i++)
+            var result = _context.Persons.SingleOrDefault(x => x.Id.Equals(id));
+            if (result != null)
             {
-                persons.Add(MockPerson(i));
+                try
+                {
+                    _context.Persons.Remove(result);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
-            return persons;
         }
 
-        //mock
-        public Person FindById(long i)
+        private bool Exists(long id)
         {
-            return new Person
-            {
-                Id = IncrementAndGet(),
-                FirstName = $"{i} Diego",
-                LastName = "Rohr",
-                Address = "Sarandi - Porto Alege - Rio Grande do Sul",
-                Gender = "Male"
-            };
-        }
-
-        public Person Update(Person person)
-        {
-            return person;
-        }
-
-        private Person MockPerson(int i)
-        {
-            return new Person
-            {
-                Id = IncrementAndGet(),
-                FirstName = $"{i} Diego Person",
-                LastName = "Rohr Person",
-                Address = "Sarandi - Porto Alege - Rio Grande do Sul",
-                Gender = "Male"
-            };
-        }
-
-        private long IncrementAndGet()
-        {
-            return Interlocked.Increment(ref count);
+            var result = _context.Persons.Any(x => x.Id.Equals(id));
+            return result;
         }
     }
 }

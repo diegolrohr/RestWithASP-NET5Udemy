@@ -46,6 +46,14 @@ namespace RestWithASPNETUdemy.Controllers
             return Ok(_personService.Create(person));
         }
 
+        [HttpPost]
+        [Route("insertRange")]
+        public IActionResult Post([FromBody] List<Person> persons)
+        {
+            if (persons == null) return BadRequest();
+            return Ok(_personService.CreateRange(persons));
+        }
+
         [HttpPut]
         public IActionResult Put([FromBody] Person person)
         {
